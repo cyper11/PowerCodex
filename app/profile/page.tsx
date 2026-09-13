@@ -1,0 +1,1 @@
+import {Profile} from '../practice';export const metadata={title:'Power Profile'};export default function Page(){return <Profile/>}

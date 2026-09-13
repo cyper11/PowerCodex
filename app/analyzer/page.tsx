@@ -1,0 +1,1 @@
+import {Analyzer} from '../learning';export const metadata={title:'Strategy Analyzer'};export default function Page(){return <Analyzer/>}

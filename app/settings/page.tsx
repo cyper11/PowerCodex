@@ -1,0 +1,1 @@
+import {SettingsPage} from '../settings-ui';export const metadata={title:'Settings & About'};export default function Page(){return <SettingsPage/>}

@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789294576397,
+      "tag": "0000_cooing_santa_claus",
+      "breakpoints": true
+    }
+  ]
+}

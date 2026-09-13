@@ -1,0 +1,1 @@
+import {Journal} from '../journal-ui';export const metadata={title:'Power Journal'};export default function Page(){return <Journal/>}

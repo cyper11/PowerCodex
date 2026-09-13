@@ -1,0 +1,3 @@
+'use client';
+export async function api<T=unknown>(path:string,method='GET',data?:unknown){const r=await fetch('/api/'+path,{method,headers:{'Content-Type':'application/json'},...(data!==undefined?{body:JSON.stringify(data)}:{})});let result:T & {error?:string};try{result=await r.json() as T & {error?:string}}catch{throw Error('Hindi available ang service ngayon. Nandito pa ang input mo; subukan ulit.')}if(!r.ok)throw Error(result.error||'Hindi na-save. Subukan ulit.');return result;}
+export function stageReflection(situation:string,lesson:string,law:number|null){try{sessionStorage.setItem('codex-reflection-draft',JSON.stringify({situation,lesson,law}))}catch{throw Error('Hindi naihanda ng browser ang draft. Buksan ang journal para isulat ito nang diretso.')}}

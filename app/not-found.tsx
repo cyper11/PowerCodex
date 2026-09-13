@@ -1,0 +1,1 @@
+import Link from 'next/link';export default function NotFound(){return <div className="page narrow empty"><h1>Wala sa codex ang page na ito.</h1><p>Balik sa archive para pumili sa 48 laws.</p><Link href="/laws" className="button primary">Explore the laws</Link></div>}

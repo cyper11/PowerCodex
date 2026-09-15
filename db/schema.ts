@@ -1,4 +1,6 @@
-import {sqliteTable,text,integer,primaryKey,index} from 'drizzle-orm/sqlite-core';
+import {sqliteTable,text,integer,primaryKey,index,uniqueIndex} from 'drizzle-orm/sqlite-core';
+export const accounts=sqliteTable('accounts',{id:text('id').primaryKey(),email:text('email').notNull(),passwordHash:text('password_hash').notNull(),createdAt:text('created_at').notNull()},t=>[uniqueIndex('accounts_email_unique').on(t.email)]);
+export const sessions=sqliteTable('sessions',{id:text('id').primaryKey(),owner:text('owner').notNull(),expiresAt:text('expires_at').notNull(),createdAt:text('created_at').notNull()},t=>[index('sessions_owner').on(t.owner),index('sessions_expires').on(t.expiresAt)]);
 export const journal=sqliteTable('journal',{id:text('id').primaryKey(),owner:text('owner').notNull(),situation:text('situation').notNull(),lesson:text('lesson').notNull(),law:integer('law'),createdAt:text('created_at').notNull()},t=>[index('journal_owner_created').on(t.owner,t.createdAt)]);
 export const notes=sqliteTable('notes',{owner:text('owner').notNull(),law:integer('law').notNull(),body:text('body').notNull(),updatedAt:text('updated_at').notNull()},t=>[primaryKey({columns:[t.owner,t.law]})]);
 export const profiles=sqliteTable('profiles',{owner:text('owner').primaryKey(),answers:text('answers').notNull(),updatedAt:text('updated_at').notNull()});

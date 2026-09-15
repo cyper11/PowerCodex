@@ -1,1 +1,7 @@
-import {Simulator} from '../practice';export const metadata={title:'Situation Simulator'};export default function Page(){return <Simulator/>}
+import { Simulator } from '../simulator-ui';
+
+export const metadata = { title: 'Situation Simulator' };
+
+export default function Page() {
+  return <Simulator />;
+}

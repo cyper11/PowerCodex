@@ -1,0 +1,20 @@
+.account-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:38px;align-items:start}
+.account-card{max-width:620px;width:100%}
+.account-card h2{font-size:34px}
+.account-card .button{align-self:flex-start}
+.account-tabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line);margin-bottom:8px}
+.account-tabs button{padding:12px;background:transparent;color:var(--body-muted);border:0;border-bottom:2px solid transparent}
+.account-tabs button.active{color:var(--gold);border-bottom-color:var(--gold)}
+.account-aside{padding:30px 0}
+.account-aside h2{font-size:32px;margin:22px 0 15px}
+.account-aside p{font-size:14px;line-height:1.85}
+.account-aside ul{margin:24px 0;padding-left:20px;color:#b0b6a5;font-size:14px}
+.account-aside li{margin:10px 0}
+.result-actions{justify-content:center;margin-top:25px;flex-wrap:wrap}
+.error>.button{margin:8px 4px 0}
+
+@media(max-width:800px){
+  .account-layout{grid-template-columns:1fr;gap:25px}
+  .account-aside{padding:0}
+  .account-aside h2{font-size:28px}
+}

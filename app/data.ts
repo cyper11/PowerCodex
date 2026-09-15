@@ -675,6 +675,486 @@ export const scenarios:Scenario[]=[
         "Tama ang pag-stop, pero puwedeng masira later ang result dahil sa kalabuan. Kasama sa pag-secure ng agreement ang pag-confirm ng details."
       ]
     ]
+  },
+  {
+    "id": 11,
+    "law": 2,
+    "title": "Kaibigan mo o dating rival?",
+    "setting": "Teamwork · Choosing partners",
+    "text": "Kailangan mo ng co-lead para sa high-stakes project. Close friend mo ang unang volunteer pero madalas siyang late. Ang dating rival mo naman ay consistent at malinaw kausap, kahit hindi pa kayo close. Paano ka pipili?",
+    "choices": [
+      [
+        "Piliin agad ang kaibigan dahil mas komportable kayong mag-usap.",
+        0,
+        "Mahalaga ang comfort, pero hindi nito nasasagot ang reliability na kailangan ng project. Puwedeng madamay pati friendship kapag hindi malinaw ang expectations."
+      ],
+      [
+        "Piliin ang dating rival para lang mapatunayan na wala kang kinikilingan.",
+        1,
+        "Posibleng tama ang tao pero mali ang dahilan. Ang symbolic na pagpili ay hindi kapalit ng pag-check sa skills, commitment, at working agreement."
+      ],
+      [
+        "I-compare ang track record, capacity, at commitment nila; piliin ang best fit at ilagay sa sulat ang roles.",
+        2,
+        "Ginamit mo ang ebidensya kaysa closeness o history lang. Practical na lens ito ng Law 2: piliin ang collaborator ayon sa actual na behavior at aligned interests."
+      ]
+    ]
+  },
+  {
+    "id": 12,
+    "law": 4,
+    "title": "Humihina na ang punto sa dami ng paliwanag.",
+    "setting": "Communication · Executive update",
+    "text": "May limang minuto ka para i-update ang leadership tungkol sa delayed project. Kumpleto ang analysis mo pero isang decision lang ang kailangan nila ngayon. Ano ang sasabihin mo?",
+    "choices": [
+      [
+        "Ikuwento ang buong timeline para makita nilang pinag-isipan mo lahat.",
+        0,
+        "Makikita ang effort mo pero baka matabunan ang decision sa detalye. Kapag limitado ang attention, ang sobrang context ay puwedeng maging ingay."
+      ],
+      [
+        "Sabihin ang delay, pangunahing dahilan, rekomendasyon, at eksaktong decision na kailangan—saka sagutin ang tanong nila.",
+        2,
+        "Malinaw ang essential facts at may space silang magtanong. Ito ang useful side ng Law 4: concise pero hindi kulang sa impormasyong kailangan sa decision."
+      ],
+      [
+        "Sabihing may delay pero huwag magbigay ng dahilan hangga't hindi hinihingi.",
+        1,
+        "Maikli ito, pero maaaring masyadong malabo para makapagdesisyon sila. Ang brevity ay hindi pagtatago ng material facts."
+      ]
+    ]
+  },
+  {
+    "id": 13,
+    "law": 5,
+    "title": "May kumakalat na maling kuwento tungkol sa iyo.",
+    "setting": "Career · Reputation",
+    "text": "May nagsasabing ikaw ang dahilan ng missed deadline, pero nasa project record na dalawang linggo kang nag-flag ng dependency. May isang maliit na delay ka ring talagang kasalanan. Ano ang gagawin mo?",
+    "choices": [
+      [
+        "I-post ang project record, linawin ang dependency, at akuin nang diretso ang maliit na delay mo.",
+        2,
+        "Pinrotektahan mo ang reputation gamit ang facts habang hindi umiiwas sa tunay mong accountability. Mas credible ang correction dahil hindi mo binura ang sarili mong pagkukulang."
+      ],
+      [
+        "Hayaan na lang; alam naman ng close teammates mo ang totoo.",
+        1,
+        "Maaaring mawala ang tsismis, pero puwede ring manatili ang maling record sa mga taong gumagawa ng decisions. Hindi lahat ng issue ay dapat patulan, pero material ito sa work mo."
+      ],
+      [
+        "Sisihin nang buo ang kabilang team at huwag banggitin ang delay mo.",
+        0,
+        "Makakagawa ka ng counterattack pero mahina ito kapag lumabas ang omitted fact. Ang pagtatanggol sa image na walang accountability ay puwedeng makasira lalo sa tiwala."
+      ]
+    ]
+  },
+  {
+    "id": 14,
+    "law": 6,
+    "title": "Maganda ang trabaho mo, pero walang nakakaalam.",
+    "setting": "Career · Visibility",
+    "text": "Nakabawas ng walong oras kada linggo ang automation na ginawa mo, pero ang nakikita lang ng ibang leaders ay ang final dashboard. Review season na sa susunod na buwan. Ano ang move mo?",
+    "choices": [
+      [
+        "Maghintay na lang na may makapansin; sapat dapat ang good work.",
+        1,
+        "May integrity ang tahimik na delivery, pero hindi automatic na nakikita ng decision-makers ang impact. Kailangan pa ring gawing legible ang value."
+      ],
+      [
+        "Gumawa ng maikling before-and-after case study, ilagay ang metrics, at kilalanin ang tumulong.",
+        2,
+        "Naging visible ang resulta nang hindi ginagawang spectacle ang sarili. Ang attention ay nakatali sa tunay na value at tamang credit."
+      ],
+      [
+        "I-announce araw-araw na ikaw ang gumawa ng pinakamahalagang tool ng team.",
+        0,
+        "Mapapansin ka, pero posibleng mas maalala ang self-promotion kaysa actual impact. Hindi lahat ng attention ay nakakatulong sa reputation."
+      ]
+    ]
+  },
+  {
+    "id": 15,
+    "law": 8,
+    "title": "Paulit-ulit kang humahabol sa potential client.",
+    "setting": "Freelance · Positioning",
+    "text": "Tatlong beses nang na-reschedule ng prospect ang vague na discovery call. Alam mong common sa industry nila ang isang costly reporting problem na kaya mong i-diagnose. Ano ang susunod mong gagawin?",
+    "choices": [
+      [
+        "Magpadala araw-araw ng follow-up hanggang sumagot sila.",
+        0,
+        "Baka makakuha ka ng reply dahil sa pressure, pero lalo mong ipinapakitang wala kang control sa oras at setup. Hindi rin nagiging mas malinaw ang value ng meeting."
+      ],
+      [
+        "Itigil lahat ng contact nang walang paliwanag.",
+        1,
+        "Naprotektahan mo ang oras mo, pero isinara mo rin ang opportunity bago subukang baguhin ang vague na setup."
+      ],
+      [
+        "Mag-offer ng 20-minute reporting audit na may malinaw na output at dalawang available schedule.",
+        2,
+        "May dahilan na silang lumapit at malinaw ang next step. Ginamit mo ang Law 8 sa pamamagitan ng tunay na value, hindi pekeng bait."
+      ]
+    ]
+  },
+  {
+    "id": 16,
+    "law": 12,
+    "title": "Sobrang generous ng bagong vendor.",
+    "setting": "Business · Due diligence",
+    "text": "Nagbigay ang vendor ng libreng setup at candid na umamin sa isang minor limitation. Kapalit nito, gusto nilang pumirma ka ngayong araw sa one-year contract na hindi pa nababasa ng legal. Ano ang response mo?",
+    "choices": [
+      [
+        "Pumirma dahil napatunayan na ng honesty at free setup na trustworthy sila.",
+        0,
+        "Ang isang honest gesture ay magandang signal pero hindi ebidensya para sa lahat ng terms. Ang urgency ay lalo pang dahilan para basahin ang buong agreement."
+      ],
+      [
+        "Pasalamatan sila, i-document ang offer, at ipa-review pa rin ang contract bago mag-commit.",
+        2,
+        "Tinanggap mo ang gesture nang hindi isinusuko ang due diligence. Ito ang defensive lesson ng Law 12: huwag hayaang palitan ng isang magandang signal ang buong pagsusuri."
+      ],
+      [
+        "I-reject agad dahil siguradong manipulation ang kahit anong libreng offer.",
+        1,
+        "Protektado ka sa risk pero baka isara mo ang useful deal base rin sa assumption. Ang tamang sagot ay verification, hindi automatic trust o automatic suspicion."
+      ]
+    ]
+  },
+  {
+    "id": 17,
+    "law": 16,
+    "title": "Lagi kang available—at nauubos ang focus mo.",
+    "setting": "Work · Boundaries",
+    "text": "Ikaw ang subject-matter expert at halos bawat chat ay sinasagot mo agad. Dumami ang interruptions, bumagal ang deep work, at nasanay ang team na hindi muna maghanap ng sagot. Ano ang babaguhin mo?",
+    "choices": [
+      [
+        "Magtakda ng office hours, gumawa ng FAQ, at mag-iwan ng emergency channel.",
+        2,
+        "Mas intentional na ang availability mo habang reliable pa rin sa urgent work. Ang absence dito ay structured focus, hindi pagkawala sa responsibilities."
+      ],
+      [
+        "I-mute lahat ng messages nang isang linggo nang walang abiso.",
+        0,
+        "Makakakuha ka ng focus pero mawawala ang predictability at tiwala ng team. Ang scarcity na walang malinaw na boundary ay mukhang unreliability."
+      ],
+      [
+        "Ipagpatuloy ang instant replies pero magtrabaho na lang nang mas mahaba.",
+        1,
+        "Nananatili kang helpful ngayon, pero hindi sustainable at walang natututuhang independence ang team. Hindi oras lang ang problema; system din."
+      ]
+    ]
+  },
+  {
+    "id": 18,
+    "law": 18,
+    "title": "Iisang adviser lang ang naririnig mo.",
+    "setting": "Leadership · Information",
+    "text": "Remote ang team mo at isang senior lead ang laging nagbibigay ng updates. Maayos ang reports niya, pero may signs na iba ang experience ng frontline staff. Ano ang gagawin mo?",
+    "choices": [
+      [
+        "Magtiwala lang sa senior lead para malinaw ang chain of command.",
+        0,
+        "Simple ang information flow pero vulnerable ka sa iisang lens. Kahit mahusay ang adviser, may blind spots ang isolation."
+      ],
+      [
+        "Magbukas ng regular listening sessions at anonymous channel habang malinaw pa rin ang role ng senior lead.",
+        2,
+        "Pinalawak mo ang sources nang hindi binubura ang accountability structure. Ito ang practical warning ng Law 18 laban sa information fortress."
+      ],
+      [
+        "Kausapin nang palihim ang lahat at itago ito sa senior lead.",
+        1,
+        "Makakakuha ka ng ibang impormasyon pero gagawa ka rin ng distrust. Puwedeng maging transparent ang listening system at hindi personal na imbestigasyon."
+      ]
+    ]
+  },
+  {
+    "id": 19,
+    "law": 19,
+    "title": "Pareho ang feedback, iba ang taong tatanggap.",
+    "setting": "Client work · Stakeholders",
+    "text": "Kailangan mong sabihing hindi feasible ang request ng influential client sponsor. Kilala siyang mabilis mapahiya kapag kino-correct sa malaking meeting, pero receptive sa evidence sa one-on-one. Ano ang approach mo?",
+    "choices": [
+      [
+        "I-correct siya sa all-hands para walang duda kung sino ang tama.",
+        0,
+        "Publicly clear ang position mo pero tinaasan mo ang status cost ng pagbabago niya ng isip. Ang format ay puwedeng maging mas malaking problema kaysa facts."
+      ],
+      [
+        "I-approve ang request kahit infeasible para hindi siya ma-offend.",
+        1,
+        "Naiwasan mo ang immediate tension pero gumawa ka ng mas malaking delivery problem. Ang pag-intindi sa tao ay hindi pagsuko sa professional judgment."
+      ],
+      [
+        "Mag-one-on-one muna, ipakita ang constraints, at dalhin sa meeting ang options na pareho ninyong na-review.",
+        2,
+        "Inangkop mo ang delivery sa tao habang nananatiling totoo ang impormasyon. Ang Law 19 ay context, hindi special treatment na walang boundaries."
+      ]
+    ]
+  },
+  {
+    "id": 20,
+    "law": 20,
+    "title": "Pinipilit kang pumili ng kampo nang maaga.",
+    "setting": "Community · Competing proposals",
+    "text": "May dalawang grupo na may magkaibang proposal para sa community fund. Pareho silang humihingi ng public endorsement bago mailabas ang budget at feasibility details. Ano ang gagawin mo?",
+    "choices": [
+      [
+        "Sabihing magre-review ka kapag kumpleto na ang criteria at data, at magtakda ng petsa para sa decision.",
+        2,
+        "Pinrotektahan mo ang independence habang malinaw na hindi ka iiwas sa commitment habambuhay. May process at deadline ang paghihintay mo."
+      ],
+      [
+        "I-endorse pareho kahit hindi puwedeng pondohan pareho.",
+        0,
+        "Mukhang neutral sa simula pero hindi credible ang mutually incompatible promises. Mawawala ang tiwala kapag kailangan nang pumili."
+      ],
+      [
+        "Tumangging magbigay ng kahit anong sagot kahit kumpleto na ang impormasyon.",
+        1,
+        "Napanatili mo ang options pero hindi na ito useful independence. Kapag oras na ng decision, ang walang commitment ay nagiging unreliability."
+      ]
+    ]
+  },
+  {
+    "id": 21,
+    "law": 22,
+    "title": "Hindi mo kayang manalo sa direct fight ngayon.",
+    "setting": "Startup · Resource constraints",
+    "text": "Mas malaking competitor ang nag-price cut sa market. Kaunti ang runway mo at hindi mo kayang tapatan ang presyo nang anim na buwan. May loyal niche na pinahahalagahan ang specialized support mo. Ano ang move?",
+    "choices": [
+      [
+        "Tapatan agad ang price cut kahit maubos ang runway.",
+        0,
+        "Nakipaglaban ka sa field kung saan pinakamalakas ang competitor. Ang symbolic resistance ay puwedeng maubos ang resources bago gumana ang advantage mo."
+      ],
+      [
+        "Umatras sa broad market, protektahan ang niche, at gamitin ang oras para palalimin ang specialized offer.",
+        2,
+        "Ang tactical retreat ay nagligtas ng oras at resources habang binabago mo ang battlefield. Hindi ito permanenteng pagsuko sa objective."
+      ],
+      [
+        "Isara agad ang business dahil may mas malaking competitor.",
+        1,
+        "Iniwasan mo ang costly fight pero isinuko mo pati ang niche advantage na puwede pang protektahan. May pagitan ang retreat at total exit."
+      ]
+    ]
+  },
+  {
+    "id": 22,
+    "law": 24,
+    "title": "May idea kang kokontra sa room.",
+    "setting": "Leadership · Diplomacy",
+    "text": "Sa strategy meeting, enthusiastic ang executives sa proposal. May data kang nagpapakitang delikado ang isang assumption, pero hindi mo kailangang sirain ang buong direction para ma-test ito. Paano ka kokontra?",
+    "choices": [
+      [
+        "Sabihing reckless ang proposal at mali ang lahat ng sumusuporta rito.",
+        0,
+        "Nailabas mo ang concern pero tinaasan mo ang social cost ng pakikinig sa iyo. Baka depensahan nila ang status imbes na suriin ang assumption."
+      ],
+      [
+        "Manahimik at hintaying mag-fail ang proposal.",
+        1,
+        "Hindi ka nakabangga pero hindi mo rin ginampanan ang responsibilidad mong magbigay ng material evidence. Diplomacy ay hindi passive compliance."
+      ],
+      [
+        "Kilalanin ang objective, ipakita ang risky assumption, at mag-propose ng maliit na test bago ang full commitment.",
+        2,
+        "Napanatili mo ang dignity ng room at nailipat ang disagreement sa testable question. Ito ang skilled diplomacy na inilalarawan ng Law 24."
+      ]
+    ]
+  },
+  {
+    "id": 23,
+    "law": 25,
+    "title": "Nakakahon ka na sa lumang role.",
+    "setting": "Career · Reinvention",
+    "text": "Kilala ka bilang reliable support person, pero gusto mong lumipat sa product strategy. May chance kang manguna sa maliit na research project na magiging ebidensya ng bagong direction. Ano ang gagawin mo?",
+    "choices": [
+      [
+        "Tanggapin ang project, linawin ang strategic ownership, at gumawa ng visible na output na tugma sa role na gusto mo.",
+        2,
+        "Hindi ka lang nag-announce ng bagong identity; gumawa ka ng evidence para rito. Ang reinvention ay mas credible kapag may consistent na action."
+      ],
+      [
+        "Palitan agad ang title mo online kahit wala ka pang ginagawa sa bagong field.",
+        1,
+        "Nagsimula kang baguhin ang framing, pero puwedeng maging hollow kung walang bagong work o skill na susuporta rito."
+      ],
+      [
+        "Tumanggi sa lahat ng support work ngayon para putulin ang lumang identity.",
+        0,
+        "Decisive ang break pero maaari mong sirain ang reputation bago mabuo ang kapalit. Puwedeng gumawa ng transition nang may continuity."
+      ]
+    ]
+  },
+  {
+    "id": 24,
+    "law": 26,
+    "title": "May desisyong siguradong may magagalit.",
+    "setting": "Management · Accountability",
+    "text": "Kailangan bawasan ang scope para maabot ang legal deadline. Gusto ng ilang leaders na ipasa sa project coordinator ang announcement kahit ikaw ang final decision-maker. Ano ang gagawin mo?",
+    "choices": [
+      [
+        "Hayaan ang coordinator ang mag-announce para malinis ang pangalan mo.",
+        0,
+        "Nailayo mo ang sarili sa bad news pero malinaw kung sino talaga ang may authority. Puwedeng mawala ang tiwala sa iyo at maipit ang taong walang final say."
+      ],
+      [
+        "I-delay ang announcement hanggang wala nang puwedeng mag-object.",
+        1,
+        "Naiwasan mo muna ang reaction pero lumiliit ang oras ng team para mag-adjust. Ang delay ay puwedeng magpalala sa parehong conflict."
+      ],
+      [
+        "Akuin ang decision, ipaliwanag ang constraint, at ipahawak sa coordinator ang malinaw na implementation plan.",
+        2,
+        "Malinis ang roles: sa iyo ang accountability, sa coordinator ang execution na may support. Hindi mo ginamit ang Law 26 bilang excuse para gawing shield ang ibang tao."
+      ]
+    ]
+  },
+  {
+    "id": 25,
+    "law": 31,
+    "title": "Ikaw ang magse-set ng choices sa negotiation.",
+    "setting": "Negotiation · Options",
+    "text": "Kailangan ng client ng mas mabilis na delivery, pero hindi puwedeng sabay na fixed ang scope, deadline, at budget. Hinihintay nila ang recommendation mo. Ano ang ihaharap mo?",
+    "choices": [
+      [
+        "Sabihin lang na imposible ang request at sila na ang mag-isip ng kapalit.",
+        1,
+        "Totoo ang constraint pero iniwan mong walang path ang decision. Mas useful ang boundary kapag may viable alternatives."
+      ],
+      [
+        "Magbigay ng tatlong honest options: bawas scope, dagdag budget, o phased launch—kasama ang tradeoff ng bawat isa.",
+        2,
+        "Ikaw ang nag-frame ng realistic decision space habang tunay pa rin ang choice ng client. Ethical application ito ng Law 31."
+      ],
+      [
+        "Magpakita ng tatlong option pero sadyang gawing absurd ang dalawa para mapili ang gusto mo.",
+        0,
+        "Makokontrol mo ang choice sa maikling panahon, pero deceptive ang setup at puwedeng masira ang trust kapag nakita ang manipulation."
+      ]
+    ]
+  },
+  {
+    "id": 26,
+    "law": 32,
+    "title": "Mas madaling ibenta ang magandang pangako.",
+    "setting": "Creator · Audience trust",
+    "text": "Mas mataas ang click rate ng headline na nangangakong 'instant transformation,' pero ang program mo ay nangangailangan ng consistent na practice sa loob ng ilang linggo. Ano ang ilalabas mo?",
+    "choices": [
+      [
+        "Gamitin ang instant claim; saka na lang ipaliwanag ang effort pagkatapos bumili.",
+        0,
+        "Mas attractive ang fantasy pero mismatch ito sa actual experience. Ang short-term conversion ay puwedeng maging refunds at pagkawala ng trust."
+      ],
+      [
+        "Iwasan ang kahit anong inspiring language at ilista lang ang technical details.",
+        1,
+        "Tumpak pero baka hindi makita ng audience kung bakit mahalaga ang program. Hindi kailangang patayin ang aspiration para maging honest."
+      ],
+      [
+        "Ipakita ang desirable outcome, ang realistic timeline, at ang effort na kailangan para makarating doon.",
+        2,
+        "Nakipag-usap ka sa aspiration nang hindi gumagawa ng pekeng shortcut. Nakuha mo ang insight ng Law 32 habang pinoprotektahan ang informed choice."
+      ]
+    ]
+  },
+  {
+    "id": 27,
+    "law": 33,
+    "title": "Hindi gumagana ang parehong motivation sa lahat.",
+    "setting": "Mentoring · Motivation",
+    "text": "Mahusay ang mentee mo pero hindi niya tinatapos ang optional stretch assignments. Akala mo recognition ang gusto niya, pero sinabi niyang mas interesado siyang magkaroon ng autonomy at portfolio evidence. Ano ang next move?",
+    "choices": [
+      [
+        "Bigyan siya ng mas maraming public praise para ma-pressure siyang mag-deliver.",
+        0,
+        "Ginamit mo ang assumption mo kahit sinabi na niya ang actual motivator. Puwede pang maging unwanted exposure ang praise."
+      ],
+      [
+        "Bigyan siya ng maliit na project na siya ang magde-design at puwede niyang ilagay sa portfolio, na may malinaw na deadline.",
+        2,
+        "Inangkop mo ang opportunity sa tunay niyang motivation habang malinaw ang responsibility. Insight ang ginamit mo, hindi exploitation."
+      ],
+      [
+        "Itigil lahat ng stretch work dahil hindi siya motivated.",
+        1,
+        "Nabawasan ang pressure pero binale-wala mo ang mas specific na signal. Baka mali lang ang incentive at format, hindi ang willingness niyang lumago."
+      ]
+    ]
+  },
+  {
+    "id": 28,
+    "law": 38,
+    "title": "Iba ang paniniwala mo sa group norm.",
+    "setting": "Social · Belonging",
+    "text": "Sa professional group, normal ang pag-post ng confidential-looking client screenshots para magmukhang successful. Ayaw mong gawin iyon, pero ayaw mo ring gawing public moral battle ang bawat interaction. Ano ang approach mo?",
+    "choices": [
+      [
+        "Gayahin ang posts para hindi ka mapag-iwanan.",
+        0,
+        "Nakibagay ka pero nilabag mo ang boundary na mahalaga sa iyo at posibleng privacy obligations din. Hindi lahat ng norm ay dapat sundin."
+      ],
+      [
+        "Panatilihin ang boundary, mag-share ng anonymized case studies, at pumili ng tamang moment para ipaliwanag ang practice mo.",
+        2,
+        "Nakahanap ka ng socially legible na paraan nang hindi isinusuko ang principle. Ang adaptation ay nasa presentation, hindi sa ethics."
+      ],
+      [
+        "Tawaging unethical ang buong group sa bawat post.",
+        1,
+        "Malinaw ang paninindigan mo pero maaaring wala nang makinig dahil adversarial ang bawat moment. May mas targeted na paraan para protektahan ang boundary at impluwensiya."
+      ]
+    ]
+  },
+  {
+    "id": 29,
+    "law": 40,
+    "title": "Libre raw—pero ano ang tunay na kapalit?",
+    "setting": "Personal finance · Offers",
+    "text": "May free productivity app na humihingi ng access sa contacts, calendar, at browsing activity. May paid alternative na basic lang ang permissions at malinaw ang business model. Kailangan mo lang ng task list at reminders. Ano ang pipiliin mo?",
+    "choices": [
+      [
+        "Piliin ang free app dahil walang lalabas na pera.",
+        0,
+        "Zero ang cash price pero may kapalit na data at access na hindi kailangan sa goal mo. Ang libre ay hindi awtomatikong walang cost."
+      ],
+      [
+        "Ikumpara ang total cost at permissions; piliin ang option na tugma sa needs at privacy boundary mo.",
+        2,
+        "Tiningnan mo ang buong exchange imbes na sticker price lang. Ito ang practical caution ng Law 40 tungkol sa hidden obligations at tradeoffs."
+      ],
+      [
+        "Iwasan lahat ng tools dahil may kapalit ang bawat serbisyo.",
+        1,
+        "Naiwasan mo ang hidden cost pero pati useful exchange ay tinanggihan mo. Ang goal ay informed tradeoff, hindi automatic rejection sa lahat ng bayad o libre."
+      ]
+    ]
+  },
+  {
+    "id": 30,
+    "law": 48,
+    "title": "Nagbago ang conditions sa gitna ng plano.",
+    "setting": "Crisis · Adaptability",
+    "text": "Naka-design ang event para sa 200 onsite guests, pero dalawang araw bago ito ay nagkaroon ng transport disruption. Available ang livestream setup at puwedeng hatiin ang program. Ano ang gagawin mo?",
+    "choices": [
+      [
+        "Ituloy nang eksakto ang original plan para ipakitang consistent ka.",
+        0,
+        "Consistent ang format pero hindi na ito tugma sa conditions. Ang rigidity ay puwedeng gawing failure ang commitment mo sa lumang method."
+      ],
+      [
+        "I-cancel agad lahat kahit may viable na hybrid option.",
+        1,
+        "Decisive ang response at maaaring kailangan kung unsafe, pero sa ibinigay na context ay may paraan pang protektahan ang core outcome."
+      ],
+      [
+        "Panatilihin ang core sessions, ilipat online ang iba, at magtakda ng malinaw na update channel para sa guests.",
+        2,
+        "Pinanatili mo ang purpose habang binabago ang form. Ito ang Law 48: adaptability na may stable na principles at malinaw na communication."
+      ]
+    ]
   }
 ];
 export const quizQuestions=['Kapag may bagong challenge, ano ang una mong ginagawa?','Kapag may disagreement, anong move ang pinaka-natural sa iyo?','Kailan mo nararamdamang handa ka na?','Paano ka karaniwang nakakabuo ng influence?','Kapag hindi umuusad ang plano, saan ka unang tumitingin?','Aling contribution mo ang malamang mapansin ng katrabaho?'];

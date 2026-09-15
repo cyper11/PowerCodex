@@ -1,4 +1,6 @@
 import { db } from '@/db/raw';
+import { accounts, sessions } from '@/db/schema';
+import { and, eq, gt } from 'drizzle-orm';
 
 export type PowerCodexUser = {
   userId: string;
@@ -66,15 +68,12 @@ export async function getPowerCodexUser(
 
   const sessionId = await hashSessionToken(token);
   const now = new Date().toISOString();
-  const user = await db()
-    .prepare(
-      `SELECT accounts.id AS userId, accounts.email AS email
-       FROM sessions
-       JOIN accounts ON accounts.id = sessions.owner
-       WHERE sessions.id = ? AND sessions.expires_at > ?`,
-    )
-    .bind(sessionId, now)
-    .first<PowerCodexUser>();
+  const [user] = await db()
+    .select({ userId: accounts.id, email: accounts.email })
+    .from(sessions)
+    .innerJoin(accounts, eq(accounts.id, sessions.owner))
+    .where(and(eq(sessions.id, sessionId), gt(sessions.expiresAt, now)))
+    .limit(1);
 
   return user ?? null;
 }

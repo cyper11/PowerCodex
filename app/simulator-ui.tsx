@@ -1,5 +1,5 @@
 'use client';
-/* eslint-disable @next/next/no-location-assign-relative-destination -- Use browser navigation: the current vinext client router throws on transitions. */
+/* eslint-disable @next/next/no-location-assign-relative-destination -- Preserve browser navigation to the journal draft. */
 
 import { useEffect, useState } from 'react';
 import {

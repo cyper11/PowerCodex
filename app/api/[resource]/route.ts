@@ -1,8 +1,16 @@
 import { getPowerCodexUser } from '../../auth';
 import { db } from '@/db/raw';
+import { attempts, journal, notes, profiles } from '@/db/schema';
+import { and, count, desc, eq } from 'drizzle-orm';
 import { scenarios, scoreProfile } from '../../data';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+const journalFields = {
+  id: journal.id, situation: journal.situation, lesson: journal.lesson,
+  law: journal.law, createdAt: journal.createdAt,
+};
 
 const json = (data: unknown, status = 200) =>
   Response.json(data, {
@@ -76,10 +84,10 @@ async function handler(
         if (method === 'DELETE') {
           const entryId = id(data.id);
           const deleted = await db()
-            .prepare('DELETE FROM journal WHERE id=? AND owner=?')
-            .bind(entryId, owner)
-            .run();
-          if (!deleted.meta.changes) {
+            .delete(journal)
+            .where(and(eq(journal.id, entryId), eq(journal.owner, owner)))
+            .returning({ id: journal.id });
+          if (!deleted.length) {
             return json({ error: 'Hindi nahanap ang entry na iyon.' }, 404);
           }
           return json({ ok: true });
@@ -95,38 +103,25 @@ async function handler(
         const now = new Date().toISOString();
 
         if (method === 'POST') {
-          const existing = await db()
-            .prepare(
-              'SELECT id, situation, lesson, law, created_at AS createdAt FROM journal WHERE id=? AND owner=?',
-            )
-            .bind(entryId, owner)
-            .first();
+          const [existing] = await db().select(journalFields).from(journal)
+            .where(and(eq(journal.id, entryId), eq(journal.owner, owner))).limit(1);
           if (existing) return json({ entry: existing });
-          await db()
-            .prepare(
-              'INSERT INTO journal (id,owner,situation,lesson,law,created_at) VALUES (?,?,?,?,?,?)',
-            )
-            .bind(entryId, owner, situation, lesson, law, now)
-            .run();
+          await db().insert(journal).values({
+            id: entryId, owner, situation, lesson, law, createdAt: now,
+          });
         } else {
           const result = await db()
-            .prepare(
-              'UPDATE journal SET situation=?,lesson=?,law=? WHERE id=? AND owner=?',
-            )
-            .bind(situation, lesson, law, entryId, owner)
-            .run();
-          if (!result.meta.changes) {
+            .update(journal).set({ situation, lesson, law })
+            .where(and(eq(journal.id, entryId), eq(journal.owner, owner)))
+            .returning({ id: journal.id });
+          if (!result.length) {
             return json({ error: 'Hindi nahanap ang entry na iyon.' }, 404);
           }
         }
 
-        const entry = await db()
-          .prepare(
-            'SELECT id, situation, lesson, law, created_at AS createdAt FROM journal WHERE id=? AND owner=?',
-          )
-          .bind(entryId, owner)
-          .first();
-        return json({ entry });
+        const [entry] = await db().select(journalFields).from(journal)
+          .where(and(eq(journal.id, entryId), eq(journal.owner, owner))).limit(1);
+        return json({ entry: entry ?? null });
       }
 
       if (resource === 'notes' && method === 'PUT') {
@@ -134,12 +129,11 @@ async function handler(
         if (typeof data.body !== 'string' || data.body.length > 5_000) {
           throw new InputError('Hanggang 5,000 characters lang ang notes.');
         }
-        await db()
-          .prepare(
-            'INSERT INTO notes (owner,law,body,updated_at) VALUES (?,?,?,?) ON CONFLICT(owner,law) DO UPDATE SET body=excluded.body,updated_at=excluded.updated_at',
-          )
-          .bind(owner, law, data.body, new Date().toISOString())
-          .run();
+        const updatedAt = new Date().toISOString();
+        await db().insert(notes).values({ owner, law, body: data.body, updatedAt })
+          .onConflictDoUpdate({
+            target: [notes.owner, notes.law], set: { body: data.body, updatedAt },
+          });
         return json({ ok: true });
       }
 
@@ -154,12 +148,10 @@ async function handler(
         ) {
           throw new InputError('Sagutin ang lahat ng anim na reflection questions.');
         }
-        await db()
-          .prepare(
-            'INSERT INTO profiles (owner,answers,updated_at) VALUES (?,?,?) ON CONFLICT(owner) DO UPDATE SET answers=excluded.answers,updated_at=excluded.updated_at',
-          )
-          .bind(owner, JSON.stringify(data.answers), new Date().toISOString())
-          .run();
+        const answers = JSON.stringify(data.answers);
+        const updatedAt = new Date().toISOString();
+        await db().insert(profiles).values({ owner, answers, updatedAt })
+          .onConflictDoUpdate({ target: profiles.owner, set: { answers, updatedAt } });
         return json({ profile: scoreProfile(data.answers) });
       }
 
@@ -191,18 +183,10 @@ async function handler(
           score += scenario.choices[item.choice][1];
         }
 
-        await db()
-          .prepare(
-            'INSERT INTO attempts (id,owner,answers,score,created_at) VALUES (?,?,?,?,?) ON CONFLICT(id) DO NOTHING',
-          )
-          .bind(
-            attempt,
-            owner,
-            JSON.stringify(data.answers),
-            score,
-            new Date().toISOString(),
-          )
-          .run();
+        await db().insert(attempts).values({
+          id: attempt, owner, answers: JSON.stringify(data.answers), score,
+          createdAt: new Date().toISOString(),
+        }).onConflictDoNothing({ target: attempts.id });
         return json({ ok: true, score });
       }
 
@@ -210,64 +194,50 @@ async function handler(
     }
 
     if (resource === 'journal') {
-      const { results } = await db()
-        .prepare(
-          'SELECT id,situation,lesson,law,created_at AS createdAt FROM journal WHERE owner=? ORDER BY created_at DESC',
-        )
-        .bind(owner)
-        .all();
-      return json({ entries: results });
+      const entries = await db().select(journalFields).from(journal)
+        .where(eq(journal.owner, owner)).orderBy(desc(journal.createdAt));
+      return json({ entries });
     }
 
     if (resource === 'notes') {
       const law = lawId(Number(url.searchParams.get('law')));
-      const note = await db()
-        .prepare(
-          'SELECT body,updated_at AS updatedAt FROM notes WHERE owner=? AND law=?',
-        )
-        .bind(owner, law)
-        .first();
-      return json({ note });
+      const [note] = await db().select({ body: notes.body, updatedAt: notes.updatedAt })
+        .from(notes).where(and(eq(notes.owner, owner), eq(notes.law, law))).limit(1);
+      return json({ note: note ?? null });
     }
 
     if (resource === 'profile') {
-      const profile = await db()
-        .prepare('SELECT answers FROM profiles WHERE owner=?')
-        .bind(owner)
-        .first<{ answers: string }>();
-      const count = await db()
-        .prepare('SELECT count(*) AS total FROM attempts WHERE owner=?')
-        .bind(owner)
-        .first<{ total: number }>();
+      const [profile] = await db().select({ answers: profiles.answers }).from(profiles)
+        .where(eq(profiles.owner, owner)).limit(1);
+      const [practiceCount] = await db().select({ total: count() }).from(attempts)
+        .where(eq(attempts.owner, owner));
       return json({
         profile: profile ? { answers: JSON.parse(profile.answers) } : null,
-        sessions: count?.total || 0,
+        sessions: practiceCount?.total || 0,
       });
     }
 
     if (resource === 'export') {
-      const result = await db().batch([
-        db()
-          .prepare(
-            'SELECT id,situation,lesson,law,created_at FROM journal WHERE owner=?',
-          )
-          .bind(owner),
-        db()
-          .prepare('SELECT law,body,updated_at FROM notes WHERE owner=?')
-          .bind(owner),
-        db()
-          .prepare('SELECT answers,updated_at FROM profiles WHERE owner=?')
-          .bind(owner),
-        db()
-          .prepare('SELECT answers,score,created_at FROM attempts WHERE owner=?')
-          .bind(owner),
-      ]);
+      // Keep the export's original snake_case keys and a consistent read snapshot.
+      const result = await db().transaction(async transaction => {
+        const journalRows = await transaction.select({
+          id: journal.id, situation: journal.situation, lesson: journal.lesson,
+          law: journal.law, created_at: journal.createdAt,
+        }).from(journal).where(eq(journal.owner, owner));
+        const noteRows = await transaction.select({
+          law: notes.law, body: notes.body, updated_at: notes.updatedAt,
+        }).from(notes).where(eq(notes.owner, owner));
+        const profileRows = await transaction.select({
+          answers: profiles.answers, updated_at: profiles.updatedAt,
+        }).from(profiles).where(eq(profiles.owner, owner));
+        const practiceRows = await transaction.select({
+          answers: attempts.answers, score: attempts.score, created_at: attempts.createdAt,
+        }).from(attempts).where(eq(attempts.owner, owner));
+        return { journal: journalRows, notes: noteRows, profile: profileRows, practice: practiceRows };
+      }, { isolationLevel: 'repeatable read', accessMode: 'read only' });
       return json({
         exportedAt: new Date().toISOString(),
-        journal: result[0].results,
-        notes: result[1].results,
-        profile: result[2].results,
-        practice: result[3].results,
+        ...result,
       });
     }
 

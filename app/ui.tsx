@@ -1,5 +1,5 @@
 'use client';
-/* eslint-disable @next/next/no-html-link-for-pages -- Native links avoid the current vinext client navigation/prefetch runtime failure. */
+/* eslint-disable @next/next/no-html-link-for-pages -- Preserve the existing full-page navigation behavior. */
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';

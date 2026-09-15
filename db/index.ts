@@ -1,13 +1,26 @@
-import { env } from "cloudflare:workers";
-import { drizzle } from "drizzle-orm/d1";
-import * as schema from "./schema";
+import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import * as schema from './schema';
 
-export function getDb() {
-  if (!env.DB) {
-    throw new Error(
-      "Cloudflare D1 binding `DB` is unavailable. Set the `d1` field in .openai/hosting.json to `DB` or let your control plane inject the real binding values before using the database."
-    );
+// Initialize lazily so static builds do not require database credentials.
+// Reuse the pool across requests and development hot reloads.
+const globalForDb = globalThis as typeof globalThis & {
+  powerCodexDb?: PostgresJsDatabase<typeof schema>;
+};
+
+export function getDb(): PostgresJsDatabase<typeof schema> {
+  if (globalForDb.powerCodexDb) return globalForDb.powerCodexDb;
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('DATABASE_URL is missing. Set your PostgreSQL connection string.');
   }
-
-  return drizzle(env.DB, { schema });
+  const client = postgres(connectionString, {
+    // Compatible with transaction-mode connection poolers.
+    prepare: false,
+    max: 1,
+    idle_timeout: 20,
+    connect_timeout: 10,
+  });
+  globalForDb.powerCodexDb = drizzle(client, { schema });
+  return globalForDb.powerCodexDb;
 }

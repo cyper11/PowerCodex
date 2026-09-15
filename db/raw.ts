@@ -1,1 +1,2 @@
-import {env} from 'cloudflare:workers';export function db(){if(!env.DB)throw Error('Database unavailable');return env.DB;}
+// Shared typed database accessor for server-side authentication and API routes.
+export { getDb as db } from './index';

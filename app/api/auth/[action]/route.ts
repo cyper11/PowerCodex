@@ -13,8 +13,11 @@ import {
   verifyPassword,
 } from '../../../auth';
 import { db } from '@/db/raw';
+import { accounts, sessions } from '@/db/schema';
+import { eq } from 'drizzle-orm';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 const json = (data: unknown, status = 200, headers?: Record<string, string>) =>
   Response.json(data, {
@@ -47,10 +50,8 @@ async function handler(
     if (action === 'signout') {
       const token = requestSessionToken(request);
       if (token) {
-        await db()
-          .prepare('DELETE FROM sessions WHERE id = ?')
-          .bind(await hashSessionToken(token))
-          .run();
+        await db().delete(sessions)
+          .where(eq(sessions.id, await hashSessionToken(token)));
       }
       return json(
         { ok: true },
@@ -68,6 +69,9 @@ async function handler(
     } catch {
       return json({ error: 'Invalid request.' }, 400);
     }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      return json({ error: 'Invalid request.' }, 400);
+    }
 
     const email = normalizeEmail(data.email);
     const password = data.password;
@@ -82,29 +86,25 @@ async function handler(
     }
 
     if (action === 'register') {
-      const existing = await db()
-        .prepare('SELECT id FROM accounts WHERE email = ?')
-        .bind(email)
-        .first();
-      if (existing) {
-        return json({ error: 'May PowerCodex account na para sa email na ito.' }, 409);
-      }
-
       const owner = crypto.randomUUID();
       const token = createSessionToken();
       const now = new Date().toISOString();
-      await db().batch([
-        db()
-          .prepare(
-            'INSERT INTO accounts (id,email,password_hash,created_at) VALUES (?,?,?,?)',
-          )
-          .bind(owner, email, await hashPassword(password), now),
-        db()
-          .prepare(
-            'INSERT INTO sessions (id,owner,expires_at,created_at) VALUES (?,?,?,?)',
-          )
-          .bind(await hashSessionToken(token), owner, sessionExpiry(), now),
-      ]);
+      const passwordHash = await hashPassword(password);
+      const sessionId = await hashSessionToken(token);
+      const created = await db().transaction(async transaction => {
+        const [account] = await transaction.insert(accounts)
+          .values({ id: owner, email, passwordHash, createdAt: now })
+          .onConflictDoNothing({ target: accounts.email })
+          .returning({ id: accounts.id });
+        if (!account) return false;
+        await transaction.insert(sessions).values({
+          id: sessionId, owner, expiresAt: sessionExpiry(), createdAt: now,
+        });
+        return true;
+      });
+      if (!created) {
+        return json({ error: 'May PowerCodex account na para sa email na ito.' }, 409);
+      }
 
       return json(
         { user: { userId: owner, email } },
@@ -114,24 +114,19 @@ async function handler(
     }
 
     if (action === 'signin') {
-      const account = await db()
-        .prepare(
-          'SELECT id, email, password_hash AS passwordHash FROM accounts WHERE email = ?',
-        )
-        .bind(email)
-        .first<{ id: string; email: string; passwordHash: string }>();
+      const [account] = await db().select({
+        id: accounts.id, email: accounts.email, passwordHash: accounts.passwordHash,
+      }).from(accounts).where(eq(accounts.email, email)).limit(1);
       if (!account || !(await verifyPassword(password, account.passwordHash))) {
         return json({ error: 'Mali ang email o password.' }, 401);
       }
 
       const token = createSessionToken();
       const now = new Date().toISOString();
-      await db()
-        .prepare(
-          'INSERT INTO sessions (id,owner,expires_at,created_at) VALUES (?,?,?,?)',
-        )
-        .bind(await hashSessionToken(token), account.id, sessionExpiry(), now)
-        .run();
+      await db().insert(sessions).values({
+        id: await hashSessionToken(token), owner: account.id,
+        expiresAt: sessionExpiry(), createdAt: now,
+      });
 
       return json(
         { user: { userId: account.id, email: account.email } },

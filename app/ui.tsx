@@ -117,10 +117,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <main id="main">{children}</main>
       <footer>
         <a className="footer-brand" href="/">THE POWER CODEX</a>
-        <span>
-          Isang independent na study companion sa work ni Robert Greene.<br />
+        <p className="footer-disclaimer">
+          Power Codex is an independent educational project. Inspired by concepts
+          explored in Robert Greene&apos;s <i>The 48 Laws of Power</i>. Not affiliated
+          with or endorsed by Robert Greene or his publishers.
           <span className="gold">Powered by c1</span>
-        </span>
+        </p>
         <a href="/settings">About the project <ArrowUpRight size={14} /></a>
       </footer>
     </>

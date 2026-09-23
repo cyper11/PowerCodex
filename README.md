@@ -38,6 +38,10 @@ The PostgreSQL baseline in `drizzle/` preserves the six existing tables, column 
 
 The baseline initializes a fresh PostgreSQL database; it does not transfer data from the previous database. Back up and import existing rows separately before switching an existing installation. Preserve account IDs and password hashes so personal-data ownership and passwords remain intact. Existing local database files are not modified by this conversion.
 
+## Verification
+
+Run `npm test` for isolated PostgreSQL regression tests covering migrations, accounts, sessions, journal CRUD, notes, profiles, practice results, owner isolation, and exports. Tests use a disposable in-memory PGlite database, never `DATABASE_URL`. The deployed application uses the `postgres` driver; test coverage does not replace checking the deployed database connection. Run `npm run lint` and `npm run build` for lint and production TypeScript checks.
+
 ## Content
 
 Law titles follow the supplied edition. Summaries, examples, applications, and simulation questions are original commentary. The PDF itself is not bundled. The analyzer is a thematic reading guide, and the profile is an informal self-reflection.

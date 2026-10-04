@@ -1,9 +1,11 @@
 'use client';
+/* eslint-disable @next/next/no-location-assign-relative-destination -- Preserve full-page navigation, matching the rest of the app. */
 /* eslint-disable @next/next/no-html-link-for-pages -- Preserve the existing full-page navigation behavior. */
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
+  ArrowUp,
   ArrowUpRight,
   BookOpen,
   CircleUserRound,
@@ -18,6 +20,7 @@ import {
 export function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     try {
@@ -26,6 +29,30 @@ export function Shell({ children }: { children: React.ReactNode }) {
         localStorage.getItem('codex-large-text') === 'true',
       );
     } catch {}
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const typing =
+        target?.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName || '');
+      if (event.key === 'Escape') setOpen(false);
+      if (typing || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.key === '/') {
+        const search = document.querySelector<HTMLInputElement>('.searchbox input');
+        event.preventDefault();
+        if (search) search.focus();
+        else window.location.assign('/laws?focus=search');
+      }
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('keydown', onKey);
+    };
   }, []);
 
   const items = [
@@ -38,7 +65,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a className="skip" href="#main">Skip to content</a>
-      <header className="header">
+      <header className={scrolled ? 'header scrolled' : 'header'}>
         <a className="brand" href="/" aria-label="The Power Codex home">
           <Landmark size={27} />
           <span>
@@ -75,7 +102,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </a>
         </nav>
         <div className="nav-tools">
-          <a href="/laws?focus=search" aria-label="Search laws"><Search size={18} /></a>
+          <a href="/laws?focus=search" aria-label="Search laws (press /)" title="Search laws ( / )">
+            <Search size={18} />
+          </a>
           <a
             href="/journal"
             className={pathname === '/journal' ? 'active' : ''}
@@ -115,6 +144,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </button>
       </header>
       <main id="main">{children}</main>
+      <button
+        className={scrolled ? 'to-top visible' : 'to-top'}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Back to top"
+        tabIndex={scrolled ? 0 : -1}
+      >
+        <ArrowUp size={18} />
+      </button>
       <footer>
         <a className="footer-brand" href="/">THE POWER CODEX</a>
         <p className="footer-disclaimer">

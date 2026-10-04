@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
-import { ArrowRight, LockKeyhole, LogOut, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, LockKeyhole, LogOut, ShieldCheck } from 'lucide-react';
 import { api } from './client';
 import { Eyebrow, PageHead } from './ui';
 
@@ -21,6 +21,8 @@ export function AccountPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsLock, setCapsLock] = useState(false);
 
   useEffect(() => {
     api<{ user: AccountUser | null }>('auth/session')
@@ -131,10 +133,12 @@ export function AccountPage() {
               </div>
               <div>
                 <label className="form-label" htmlFor="account-password">Password</label>
+                <div className="password-field">
                 <input
                   className="field"
                   id="account-password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
+                  onKeyUp={event => setCapsLock(event.getModifierState('CapsLock'))}
                   autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
                   minLength={10}
                   maxLength={128}
@@ -142,6 +146,34 @@ export function AccountPage() {
                   onChange={event => setPassword(event.target.value)}
                   required
                 />
+                <button
+                  type="button"
+                  className="icon-button"
+                  onClick={() => setShowPassword(value => !value)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+                </div>
+                {capsLock && <p className="note warn">Naka-on ang Caps Lock.</p>}
+                {mode === 'register' && password.length > 0 && (
+                  <div className="strength" aria-live="polite">
+                    <div className="meter">
+                      <span
+                        style={{ width: `${Math.min(100, (password.length / 16) * 100)}%` }}
+                        className={password.length < 10 ? 'weak' : password.length < 14 ? 'ok' : 'strong'}
+                      />
+                    </div>
+                    <span className="note">
+                      {password.length < 10
+                        ? `${10 - password.length} pang character`
+                        : password.length < 14
+                          ? 'Pwede na'
+                          : 'Matibay'}
+                    </span>
+                  </div>
+                )}
                 {mode === 'register' && (
                   <p className="note">Gumamit ng 10–128 characters.</p>
                 )}
@@ -152,7 +184,7 @@ export function AccountPage() {
                   <input
                     className="field"
                     id="account-confirm"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     autoComplete="new-password"
                     minLength={10}
                     maxLength={128}
@@ -160,6 +192,9 @@ export function AccountPage() {
                     onChange={event => setConfirmPassword(event.target.value)}
                     required
                   />
+                  {confirmPassword && confirmPassword !== password && (
+                    <p className="note warn">Hindi pa tugma sa password.</p>
+                  )}
                 </div>
               )}
               {error && <p className="error" role="alert">{error}</p>}

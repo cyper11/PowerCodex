@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ArrowUpRight, Compass, RotateCcw } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Compass, Copy, RotateCcw } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { api } from './client';
@@ -13,6 +13,7 @@ import {
   scoreProfile,
 } from './data';
 import { Eyebrow, PageHead } from './ui';
+import { copyText } from './progress';
 
 function needsAccount(message: string): boolean {
   return /sign[ -]in/i.test(message);
@@ -28,6 +29,7 @@ export function Profile() {
   const [error, setError] = useState('');
   const [status, setStatus] = useState('');
   const [sessions, setSessions] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   async function load() {
     setError('');
@@ -174,6 +176,19 @@ export function Profile() {
                 <Eyebrow>YOUR CURRENT ARCHETYPE</Eyebrow>
                 <h2>{type.name}</h2>
                 <p>{type.line}</p>
+                <button
+                  className="chip-button"
+                  onClick={async () => {
+                    const ok = await copyText(
+                      `My Power Codex archetype: ${type.name}\n“${type.line}”\nStrengths: ${type.strengths.join(', ')}`,
+                    );
+                    setCopied(ok);
+                    if (ok) window.setTimeout(() => setCopied(false), 2_000);
+                  }}
+                >
+                  {copied ? <Check size={15} /> : <Copy size={15} />}
+                  {copied ? 'Nakopya!' : 'Copy result'}
+                </button>
               </div>
             </div>
             <div className="panel profile-metrics">

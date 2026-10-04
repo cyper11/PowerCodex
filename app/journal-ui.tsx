@@ -1,7 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, NotebookPen, Pencil, Plus, Trash2 } from 'lucide-react';
+import {
+  ArrowDownUp,
+  ArrowUpRight,
+  Check,
+  Copy,
+  NotebookPen,
+  Pencil,
+  Plus,
+  Search,
+  Trash2,
+} from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +40,7 @@ import {
 import { api } from './client';
 import { laws } from './data';
 import { Eyebrow, PageHead } from './ui';
+import { copyText } from './progress';
 
 type Entry = {
   id: string;
@@ -57,6 +68,40 @@ export function Journal() {
   const [error, setError] = useState('');
   const [status, setStatus] = useState('');
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [lawFilter, setLawFilter] = useState('all');
+  const [oldestFirst, setOldestFirst] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const needle = query.toLowerCase().trim();
+  const visible = entries
+    .filter(entry => lawFilter === 'all' || String(entry.law ?? 'none') === lawFilter)
+    .filter(
+      entry =>
+        !needle ||
+        `${entry.situation} ${entry.lesson} ${entry.law ? laws[entry.law - 1].title : ''}`
+          .toLowerCase()
+          .includes(needle),
+    )
+    .sort((left, right) =>
+      oldestFirst
+        ? left.createdAt.localeCompare(right.createdAt)
+        : right.createdAt.localeCompare(left.createdAt),
+    );
+  const usedLaws = [...new Set(entries.map(entry => entry.law).filter(Boolean))].sort(
+    (left, right) => Number(left) - Number(right),
+  ) as number[];
+
+  async function copyEntry(entry: Entry) {
+    const law = entry.law ? `\nLaw ${entry.law}: ${laws[entry.law - 1].title}` : '';
+    const ok = await copyText(
+      `${new Date(entry.createdAt).toLocaleDateString()}\n\nSituation:\n${entry.situation}\n\nLesson learned:\n${entry.lesson}${law}`,
+    );
+    if (ok) {
+      setCopied(entry.id);
+      window.setTimeout(() => setCopied(current => (current === entry.id ? null : current)), 2_000);
+    }
+  }
 
   async function load() {
     setLoading(true);
@@ -228,12 +273,62 @@ export function Journal() {
         </div>
       ) : (
         <>
-          <div className="archive-count">
-            {entries.length} {entries.length === 1 ? 'reflection' : 'reflections'}
+          <div className="journal-toolbar">
+            <div className="searchbox">
+              <Search size={18} />
+              <input
+                value={query}
+                onChange={event => setQuery(event.target.value)}
+                placeholder="Hanapin sa reflections mo…"
+                aria-label="Search journal"
+              />
+              {query && (
+                <button onClick={() => setQuery('')} aria-label="Clear search">×</button>
+              )}
+            </div>
+            <select
+              className="field compact"
+              value={lawFilter}
+              onChange={event => setLawFilter(event.target.value)}
+              aria-label="Filter by law"
+            >
+              <option value="all">Lahat ng laws</option>
+              <option value="none">Walang law</option>
+              {usedLaws.map(id => (
+                <option key={id} value={String(id)}>Law {id}</option>
+              ))}
+            </select>
+            <button
+              className="button"
+              onClick={() => setOldestFirst(value => !value)}
+              aria-label={oldestFirst ? 'Show newest first' : 'Show oldest first'}
+            >
+              <ArrowDownUp size={16} /> {oldestFirst ? 'Oldest' : 'Newest'}
+            </button>
+          </div>
+          <div className="archive-count" aria-live="polite">
+            {visible.length === entries.length
+              ? `${entries.length} ${entries.length === 1 ? 'reflection' : 'reflections'}`
+              : `${visible.length} sa ${entries.length} reflections`}
             <span>A RECORD OF YOUR OWN THINKING</span>
           </div>
+          {!visible.length && (
+            <div className="empty">
+              <h2>Walang tumugmang reflection.</h2>
+              <p>Subukan ang ibang salita o filter.</p>
+              <button
+                className="button"
+                onClick={() => {
+                  setQuery('');
+                  setLawFilter('all');
+                }}
+              >
+                Reset filters
+              </button>
+            </div>
+          )}
           <div className="journal-grid">
-            {entries.map(entry => (
+            {visible.map(entry => (
               <article className="journal-card panel" key={entry.id}>
                 <div className="row spread">
                   <time dateTime={entry.createdAt}>
@@ -244,6 +339,13 @@ export function Journal() {
                     })}
                   </time>
                   <span className="journal-actions">
+                    <button
+                      aria-label="Copy entry"
+                      title={copied === entry.id ? 'Nakopya!' : 'Copy'}
+                      onClick={() => void copyEntry(entry)}
+                    >
+                      {copied === entry.id ? <Check size={16} /> : <Copy size={16} />}
+                    </button>
                     <button aria-label="Edit entry" onClick={() => edit(entry)}>
                       <Pencil size={16} />
                     </button>
@@ -317,6 +419,12 @@ export function Journal() {
                 className="field"
                 value={lesson}
                 onChange={event => setLesson(event.target.value)}
+                onKeyDown={event => {
+                  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+                    event.preventDefault();
+                    void save();
+                  }
+                }}
                 placeholder="Ano ang natutuhan mo? Ano ang babaguhin mo?"
                 required
                 maxLength={3_000}

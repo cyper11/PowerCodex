@@ -112,6 +112,24 @@ export function Simulator() {
     setAttemptId(crypto.randomUUID());
   }
 
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (!current || complete || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(target?.tagName || '')) return;
+      const key = event.key.toLowerCase();
+      const pick = ['a', 'b', 'c'].indexOf(key) >= 0 ? ['a', 'b', 'c'].indexOf(key) : ['1', '2', '3'].indexOf(key);
+      if (!revealed && pick >= 0 && pick < current.choices.length) {
+        setSelected(String(pick));
+      } else if (event.key === 'Enter' && target?.tagName !== 'BUTTON' && target?.tagName !== 'A') {
+        if (!revealed && selected !== '') reveal();
+        else if (revealed) next();
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
+
   if (!current) {
     return (
       <div className="page narrow">
@@ -197,7 +215,7 @@ export function Simulator() {
               value={((index + (revealed ? 1 : 0)) / SESSION_SIZE) * 100}
               aria-label="Session progress"
             />
-            <h2>{current.title}</h2>
+            <h2 key={current.id} className="fade-in">{current.title}</h2>
             <p className="scenario-description">{current.text}</p>
             <RadioGroup
               value={selected}
@@ -269,7 +287,17 @@ export function Simulator() {
               <li>Random na lima mula sa {scenarios.length} varied scenarios.</li>
               <li>Piliin ang response na gagawin mo.</li>
               <li>Alamin ang epekto at kaugnay na law.</li>
+              <li>
+                Shortcut: <kbd className="kbd-hint">A</kbd> <kbd className="kbd-hint">B</kbd>{' '}
+                <kbd className="kbd-hint">C</kbd> para pumili, <kbd className="kbd-hint">Enter</kbd> para
+                tumuloy.
+              </li>
             </ul>
+            {answers.length > 0 && (
+              <p className="live-score">
+                Score so far: <strong>{total}</strong>/{answers.length * 2}
+              </p>
+            )}
             <p className="note">
               Original practice scenarios ito, base sa supplied edition ng{' '}
               <i>The 48 Laws of Power</i>. Illustration lang ang outcomes, hindi garantiya.

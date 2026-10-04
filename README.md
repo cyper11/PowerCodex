@@ -10,6 +10,10 @@ A private study companion inspired by Robert Greene’s The 48 Laws of Power, bu
 - Six-question reflection profile with transparent counts.
 - Private journal with create, edit, delete, and data export.
 - Responsive dark interface with original classical artwork and a larger-text setting.
+- Browser-saved reading progress: bookmarks, read/unread tracking, "Saved" and "Unread" archive views, a resume link, and a reset option in Settings (no account needed).
+- Law of the day and random-law shortcuts, plus share/copy-link on every law.
+- Journal search, law filter, sort order, and copy-entry; copyable analyzer and profile results.
+- Keyboard shortcuts: `/` search, `←`/`→` between laws, `A`/`B`/`C` and `Enter` in the simulator, `Ctrl`+`Enter` to analyze or save.
 
 ## Development
 

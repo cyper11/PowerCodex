@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BookOpen, Download, Lock, Sun } from 'lucide-react';
+import Link from 'next/link';
+import { BookOpen, Download, Keyboard, Lock, RotateCcw, Sun, TrendingUp } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { api } from './client';
 import { Eyebrow, PageHead } from './ui';
+import { resetProgress, useProgress } from './progress';
 
 function needsAccount(message: string): boolean {
   return /sign[ -]in/i.test(message);
@@ -14,6 +16,8 @@ export function SettingsPage() {
   const [large, setLarge] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
+  const progress = useProgress();
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -80,6 +84,56 @@ export function SettingsPage() {
               </div>
               <Switch id="larger-text" checked={large} onCheckedChange={resize} />
             </div>
+          </section>
+          <section className="panel">
+            <div className="settings-title">
+              <TrendingUp size={20} />
+              <h2>Reading progress</h2>
+            </div>
+            <div className="stat-row">
+              <div><strong>{progress.read.length}</strong><span>nabasang laws</span></div>
+              <div><strong>{progress.saved.length}</strong><span>saved laws</span></div>
+              <div><strong>{48 - progress.read.length}</strong><span>natitira</span></div>
+            </div>
+            <p className="note">Naka-save lang ito sa browser na ito; hindi kailangan ng account.</p>
+            <div className="row wrap" style={{ marginTop: 16 }}>
+              <Link className="button" href="/laws?view=saved">Tingnan ang saved</Link>
+              {confirmReset ? (
+                <>
+                  <button
+                    className="button danger"
+                    onClick={() => {
+                      resetProgress();
+                      setConfirmReset(false);
+                    }}
+                  >
+                    Oo, i-reset
+                  </button>
+                  <button className="button" onClick={() => setConfirmReset(false)}>Cancel</button>
+                </>
+              ) : (
+                <button
+                  className="button"
+                  disabled={!progress.read.length && !progress.saved.length}
+                  onClick={() => setConfirmReset(true)}
+                >
+                  <RotateCcw size={16} /> Reset progress
+                </button>
+              )}
+            </div>
+          </section>
+          <section className="panel">
+            <div className="settings-title">
+              <Keyboard size={20} />
+              <h2>Keyboard shortcuts</h2>
+            </div>
+            <dl className="shortcuts">
+              <div><dt><kbd className="kbd-hint">/</kbd></dt><dd>Search laws</dd></div>
+              <div><dt><kbd className="kbd-hint">←</kbd> <kbd className="kbd-hint">→</kbd></dt><dd>Previous / next law</dd></div>
+              <div><dt><kbd className="kbd-hint">A</kbd> <kbd className="kbd-hint">B</kbd> <kbd className="kbd-hint">C</kbd></dt><dd>Pumili sa simulator</dd></div>
+              <div><dt><kbd className="kbd-hint">Ctrl</kbd> + <kbd className="kbd-hint">Enter</kbd></dt><dd>I-analyze o i-save ang reflection</dd></div>
+              <div><dt><kbd className="kbd-hint">Esc</kbd></dt><dd>Isara ang menu o i-clear ang search</dd></div>
+            </dl>
           </section>
           <section className="panel">
             <div className="settings-title">
